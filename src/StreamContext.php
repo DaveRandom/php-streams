@@ -12,14 +12,14 @@ class StreamContext
     /**
      * Constructor
      *
-     * @param array|Stream|StreamContext $options
+     * @param array|GenericStream|StreamContext $options
      * @throws \LogicException when the option format is invalid
      */
     public function __construct($options = null)
     {
         if ($options !== null) {
-            if ($options instanceof Stream) {
-                $options = $options->getContext()->getOptions();
+            if ($options instanceof GenericStream) {
+                $options = $options->context->getOptions();
             } else if ($options instanceof StreamContext) {
                 $options = $options->getOptions();
             } else {
