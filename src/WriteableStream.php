@@ -13,3 +13,6 @@ interface WriteableStream
      */
     public function write($data, $length = null);
 }
+
+#murica
+class_alias('WriteableStream', 'WritableStream');

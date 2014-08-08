@@ -1,42 +1,29 @@
 <?php
 
-class DatagramServerSocket implements ReadableStream
+class DatagramClientSocket implements ReadableStream, WriteableStream
 {
-    /**
-     * Constructor
-     *
-     * Create and bind the local socket
-     *
-     * @param $uri
-     * @param array $options
-     */
-    public function __construct($uri, array $options = [])
-    {
-        // TODO: Implement ctor
-    }
-
     /**
      * Send some data to the remote socket
      *
-     * @param string|Datagram $data
-     * @param string $address
+     * @param string $data
      * @param int $flags
+     * @return int
      */
-    public function send($data, $address = null, $flags = 0)
+    public function send($data, $flags = 0)
     {
-        // TODO: Implement send() method.
+        //todo
     }
 
     /**
-     * Receive some data from a remote socket
+     * Receive some data from the remote socket
      *
-     * @param int $length
+     * @param int $length Unlike read(), not nullable, since a datagram socket will never get EOF from the remote party
      * @param int $flags
-     * @return Datagram
+     * @return string
      */
     public function recv($length, $flags = 0)
     {
-        // TODO: Implement recv() method.
+        //todo
     }
 
     /**
@@ -47,9 +34,9 @@ class DatagramServerSocket implements ReadableStream
      * @param int $length
      * @return string|false
      */
-    public function read($length = null)
+    public function read($length = 1024) //todo: ensure default value 1024 is sane
     {
-        // TODO: Implement read() method.
+        return $this->recv((int)$length);
     }
 
     /**
@@ -74,7 +61,7 @@ class DatagramServerSocket implements ReadableStream
      */
     public function pipeTo(WriteableStream $stream)
     {
-        // TODO: Implement pipeTo() method.
+        // TODO: Implement pipeTo() method. Not sure if this is actually sanely possible with datagrams
     }
 
     /**
@@ -82,6 +69,20 @@ class DatagramServerSocket implements ReadableStream
      */
     public function isEOF()
     {
-        // TODO: Implement isEOF() method.
+        // TODO: Implement isEOF() method. Only true when closed locally?
+    }
+
+    /**
+     * Write up to $length bytes of data to the stream
+     *
+     * @see fwrite()
+     * @see stream_copy_to_stream()
+     * @param string|ReadableStream $data
+     * @param int $length
+     * @return int|false
+     */
+    public function write($data, $length = null)
+    {
+        // TODO: Implement write() method.
     }
 }

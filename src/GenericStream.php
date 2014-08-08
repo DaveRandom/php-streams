@@ -3,7 +3,7 @@
 /**
  * Interface GenericStream
  *
- * @todo may not make sense
+ * @todo probably does not make sense
  */
 interface GenericStream
 {

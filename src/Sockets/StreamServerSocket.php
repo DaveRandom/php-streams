@@ -10,7 +10,7 @@ class StreamServerSocket implements GenericStream
      * @var array
      */
     private $options = [
-        self::OPTION_CLIENT_CLASS => 'StreamSocket',
+        self::OPTION_CLIENT_CLASS => 'StreamPeerSocket',
     ];
 
     /**
@@ -39,7 +39,7 @@ class StreamServerSocket implements GenericStream
      * Accept a pending client connection on a stream
      *
      * @param float $timeout
-     * @return StreamSocket|null
+     * @return StreamPeerSocket|null
      */
     public function accept($timeout = null)
     {
@@ -63,8 +63,8 @@ class StreamServerSocket implements GenericStream
         switch ($option) {
             case self::OPTION_CLIENT_CLASS:
                 $value = (string)$value;
-                if (!is_subclass_of($value, 'StreamSocket')) {
-                    throw new \LogicException('Client class must extend StreamSocket');
+                if (!is_subclass_of($value, 'StreamPeerSocket')) {
+                    throw new \LogicException('Client class must extend StreamPeerSocket');
                 }
                 break;
 

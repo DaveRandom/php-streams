@@ -1,42 +1,29 @@
 <?php
 
-class DatagramServerSocket implements ReadableStream
+class StreamPeerSocket implements ReadableStream, WriteableStream, EncryptableStream
 {
+
     /**
-     * Constructor
+     * Enable encryption on a stream
      *
-     * Create and bind the local socket
-     *
-     * @param $uri
-     * @param array $options
+     * @param int $type
+     * @param EncryptableStream $sessionSteam
+     * @return int|bool
      */
-    public function __construct($uri, array $options = [])
+    public function enableEncryption($type = null, EncryptableStream $sessionSteam = null)
     {
-        // TODO: Implement ctor
+        // TODO: Implement enableEncryption() method.
     }
 
     /**
-     * Send some data to the remote socket
+     * Disable encryption on a stream
      *
-     * @param string|Datagram $data
-     * @param string $address
-     * @param int $flags
+     * @return int|bool
+     * @todo look into possible return values here
      */
-    public function send($data, $address = null, $flags = 0)
+    public function disableEncryption()
     {
-        // TODO: Implement send() method.
-    }
-
-    /**
-     * Receive some data from a remote socket
-     *
-     * @param int $length
-     * @param int $flags
-     * @return Datagram
-     */
-    public function recv($length, $flags = 0)
-    {
-        // TODO: Implement recv() method.
+        // TODO: Implement disableEncryption() method.
     }
 
     /**
@@ -83,5 +70,19 @@ class DatagramServerSocket implements ReadableStream
     public function isEOF()
     {
         // TODO: Implement isEOF() method.
+    }
+
+    /**
+     * Write up to $length bytes of data to the stream
+     *
+     * @see fwrite()
+     * @see stream_copy_to_stream()
+     * @param string|ReadableStream $data
+     * @param int $length
+     * @return int|false
+     */
+    public function write($data, $length = null)
+    {
+        // TODO: Implement write() method.
     }
 }
