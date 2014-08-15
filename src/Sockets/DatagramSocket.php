@@ -1,14 +1,7 @@
 <?php
 
-abstract class DatagramSocket
+abstract class DatagramSocket extends StreamSocket
 {
-    /**
-     * Underlying socket resource
-     *
-     * @var resource
-     */
-    protected $socket;
-
     /**
      * The default remote address for send operations
      *

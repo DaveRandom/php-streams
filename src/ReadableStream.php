@@ -21,7 +21,7 @@ interface ReadableStream
      * @param string $ending
      * @return string|false
      */
-    public function readLine($length = null, $ending = null);
+    public function readLine($length = null, $ending = "\n");
 
     /**
      * Copy data from this stream to another until EOF

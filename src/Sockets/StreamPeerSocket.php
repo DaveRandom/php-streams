@@ -4,6 +4,17 @@ class StreamPeerSocket implements ReadableStream, WriteableStream, EncryptableSt
 {
 
     /**
+     * Constructor
+     *
+     * @param string $uri
+     * @param array $options
+     */
+    public function __construct($uri, $options)
+    {
+
+    }
+
+    /**
      * Enable encryption on a stream
      *
      * @param int $type

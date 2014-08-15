@@ -10,18 +10,24 @@ interface GenericStream
     /**
      * Set the value of an option on a stream
      *
-     * @param int $option
+     * @param string $family
+     * @param string $option
      * @param mixed $value
-     * @throws \LogicException when invalid option is specified
+     * @return
      */
-    public function setOption($option, $value);
+    public function setOption($family, $option, $value);
 
     /**
      * Get the value of an option on a stream
      *
-     * @param int $option
+     * @param string $family
+     * @param string $option
      * @return mixed
-     * @throws \LogicException when invalid option is specified
      */
-    public function getOption($option);
+    public function getOption($family, $option);
+
+    /**
+     * Close the stream and free the underlying resources
+     */
+    public function close();
 }

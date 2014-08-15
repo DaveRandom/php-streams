@@ -54,11 +54,12 @@ class StreamServerSocket implements GenericStream
     /**
      * Set the value of an option
      *
+     * @param int $family
      * @param int $option
      * @param mixed $value
-     * @throws \LogicException when invalid option is specified
+     * @throws LogicException
      */
-    public function setOption($option, $value)
+    public function setOption($family, $option, $value)
     {
         switch ($option) {
             case self::OPTION_CLIENT_CLASS:
@@ -78,11 +79,12 @@ class StreamServerSocket implements GenericStream
     /**
      * Get the value of an option
      *
+     * @param string $family
      * @param int $option
+     * @throws LogicException
      * @return mixed
-     * @throws \LogicException when invalid option is specified
      */
-    public function getOption($option)
+    public function getOption($family, $option)
     {
         switch ($option) {
             case self::OPTION_CLIENT_CLASS:

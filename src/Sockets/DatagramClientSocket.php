@@ -3,16 +3,50 @@
 class DatagramClientSocket extends DatagramSocket implements ReadableStream, WriteableStream
 {
     /**
+     * Get a list of the URI schemes that this type of stream can handle
+     *
+     * @return array
+     */
+    protected function getSupportedSchemes()
+    {
+        static $schemes = null;
+
+        if ($schemes === null) {
+            $schemes = ['udp'];
+
+            if (in_array('udg', stream_get_transports())) {
+                $schemes[] = 'udg';
+            }
+        }
+
+        return $schemes;
+    }
+
+    /**
      * Constructor
      *
      * Create and bind the local socket
      *
-     * @param $uri
+     * @param string $uri
      * @param array $options
+     * @throws \LogicException when an unsupported URI is supplied
+     * @throws \RuntimeException when creating the socket fails
+     * @todo add option handling
      */
     public function __construct($uri, array $options = [])
     {
-        // TODO: Implement ctor
+        $uriParts = $this->parseURI($uri);
+
+        if ($uriParts['scheme'] === 'udp' && !isset($uriParts['host'], $uriParts['port'])) {
+            throw new \LogicException('udp:// URIs require host and port components');
+        } else if ($uriParts['scheme'] === 'udg' && !isset($uriParts['path'])) {
+            throw new \LogicException('udg:// URIs require a path component');
+        }
+
+        $this->socket = stream_socket_client($uri, $errNo, $errStr);
+        if (!$this->socket) {
+            throw new \RuntimeException('Creating socket failed: ' . $errNo . ': ' . $errStr);
+        }
     }
 
     /**
@@ -25,7 +59,8 @@ class DatagramClientSocket extends DatagramSocket implements ReadableStream, Wri
      */
     public function read($length = 1024) //todo: ensure default value 1024 is sane
     {
-        return $this->recv((int)$length);
+        $datagram = $this->recv((int)$length);
+        return $datagram ? $datagram->data : false;
     }
 
     /**
@@ -37,7 +72,7 @@ class DatagramClientSocket extends DatagramSocket implements ReadableStream, Wri
      * @param string $ending
      * @return string|false
      */
-    public function readLine($length = null, $ending = null)
+    public function readLine($length = null, $ending = "\n")
     {
         // TODO: Implement readLine() method.
     }
