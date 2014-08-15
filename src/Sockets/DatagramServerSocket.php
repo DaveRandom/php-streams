@@ -1,6 +1,6 @@
 <?php
 
-class DatagramServerSocket implements ReadableStream
+class DatagramServerSocket extends DatagramSocket implements ReadableStream
 {
     /**
      * Constructor
@@ -13,30 +13,6 @@ class DatagramServerSocket implements ReadableStream
     public function __construct($uri, array $options = [])
     {
         // TODO: Implement ctor
-    }
-
-    /**
-     * Send some data to the remote socket
-     *
-     * @param string|Datagram $data
-     * @param string $address
-     * @param int $flags
-     */
-    public function send($data, $address = null, $flags = 0)
-    {
-        // TODO: Implement send() method.
-    }
-
-    /**
-     * Receive some data from a remote socket
-     *
-     * @param int $length
-     * @param int $flags
-     * @return Datagram
-     */
-    public function recv($length, $flags = 0)
-    {
-        // TODO: Implement recv() method.
     }
 
     /**

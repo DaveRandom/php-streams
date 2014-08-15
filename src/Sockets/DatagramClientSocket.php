@@ -1,29 +1,18 @@
 <?php
 
-class DatagramClientSocket implements ReadableStream, WriteableStream
+class DatagramClientSocket extends DatagramSocket implements ReadableStream, WriteableStream
 {
     /**
-     * Send some data to the remote socket
+     * Constructor
      *
-     * @param string $data
-     * @param int $flags
-     * @return int
-     */
-    public function send($data, $flags = 0)
-    {
-        //todo
-    }
-
-    /**
-     * Receive some data from the remote socket
+     * Create and bind the local socket
      *
-     * @param int $length Unlike read(), not nullable, since a datagram socket will never get EOF from the remote party
-     * @param int $flags
-     * @return string
+     * @param $uri
+     * @param array $options
      */
-    public function recv($length, $flags = 0)
+    public function __construct($uri, array $options = [])
     {
-        //todo
+        // TODO: Implement ctor
     }
 
     /**

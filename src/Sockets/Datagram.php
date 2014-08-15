@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Class Datagram
+ *
+ * @property-read string $data
+ * @property-read string $remoteAddress
+ */
 class Datagram
 {
     /**
@@ -15,44 +21,36 @@ class Datagram
     /**
      * Constructor
      *
-     * @todo Probably shouldn't exist in native impl
-     *
      * @param $data
      * @param $remoteAddr
      */
     public function __construct($data, $remoteAddr)
     {
-        $this->data = $data;
-        $this->remoteAddr = $remoteAddr;
+        $this->data = (string)$data;
+        $this->remoteAddr = (string)$remoteAddr;
     }
 
     /**
-     * Get the data payload of the datagram, to play nice with ReadableStream
+     * Magic getter for properties
      *
+     * Userland implementation detail of read-only properties, does not exist in native implementation
+     *
+     * @param $name
      * @return string
      */
-    public function __toString()
+    public function __get($name)
     {
-        return $this->data;
+        return $this->{$name};
     }
 
     /**
      * Get the data payload of the datagram
      *
+     * @todo maybe should not exist?
      * @return string
      */
-    public function getData()
+    public function __toString()
     {
         return $this->data;
-    }
-
-    /**
-     * Get the remote address associated with the datagram
-     *
-     * @return string
-     */
-    public function getRemoteAddr()
-    {
-        return $this->remoteAddr;
     }
 }
