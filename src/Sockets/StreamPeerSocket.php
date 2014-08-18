@@ -26,15 +26,15 @@ class StreamPeerSocket extends StreamSocket implements ReadableStream, Writeable
             );
         }
 
-        $timeout = $this->getOption('socket', 'connect_timeout');
+        $timeout = $this->getOption('socket.connect_timeout');
         if ($timeout === null) {
             $timeout = ini_get('default_socket_timeout');
         }
         $flags = STREAM_CLIENT_CONNECT;
-        if ($this->getOption('socket', 'async_connect')) {
+        if ($this->getOption('socket.async_connect')) {
             $flags |= STREAM_CLIENT_ASYNC_CONNECT;
         }
-        if ($this->getOption('socket', 'persistent')) {
+        if ($this->getOption('socket.persistent')) {
             $flags |= STREAM_CLIENT_PERSISTENT;
         }
         $ctx = stream_context_create($options);

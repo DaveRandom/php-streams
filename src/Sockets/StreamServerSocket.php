@@ -12,14 +12,12 @@ class StreamServerSocket extends StreamSocket
      */
     public function __construct($uri, array $options = [])
     {
-        if (!isset($options['socket']['client_class'])) {
-            $options['socket']['client_class'] = StreamPeerSocket::class;
+        if (!isset($options['socket.client_class'])) {
+            $options['socket.client_class'] = StreamPeerSocket::class;
         }
 
-        foreach ($options as $family => $opts) {
-            foreach ($opts as $option => $value) {
-                $this->setOption($family, $option, $value);
-            }
+        foreach ($options as $option => $value) {
+            $this->setOption($option, $value);
         }
 
         $uriParts = $this->parseURI($uri);
@@ -49,7 +47,7 @@ class StreamServerSocket extends StreamSocket
     public function accept($timeout = null)
     {
         if ($client = stream_socket_accept($this->stream, $timeout)) {
-            $className = $this->getOption('socket', 'client_class');
+            $className = $this->getOption('socket.client_class');
             return new $className($client);
         }
 
@@ -59,14 +57,14 @@ class StreamServerSocket extends StreamSocket
     /**
      * Set the value of an option
      *
-     * @param int $family
      * @param int $option
      * @param mixed $value
      * @throws LogicException
+     * @internal param int $family
      */
-    public function setOption($family, $option, $value)
+    public function setOption($option, $value)
     {
-        if ($family === 'socket' && $option === 'client_class') {
+        if ($option === 'socket.client_class') {
             $value = (string)$value;
 
             if (!is_subclass_of($value, StreamPeerSocket::class)) {
@@ -74,6 +72,6 @@ class StreamServerSocket extends StreamSocket
             }
         }
 
-        parent::setOption($family, $option, $value);
+        parent::setOption($option, $value);
     }
 }

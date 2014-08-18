@@ -36,25 +36,26 @@ abstract class Stream
     /**
      * Set the value of an option on a stream
      *
-     * @param string $family
      * @param string $option
      * @param mixed $value
+     * @internal param string $family
      */
-    public function setOption($family, $option, $value)
+    public function setOption($option, $value)
     {
-        $this->options[(string)$family][(string)$option] = $value;
+        $this->options[(string)$option] = $value;
     }
 
     /**
      * Get the value of an option on a stream
      *
-     * @param string $family
      * @param string $option
+     * @internal param string $family
      * @return mixed
      */
-    public function getOption($family, $option)
+    public function getOption($option)
     {
-        return isset($this->options[$family][$option]) ? $this->options[$family][$option] : null;
+        $option = (string)$option;
+        return isset($this->options[$option]) ? $this->options[$option] : null;
     }
 
     /**
