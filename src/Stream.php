@@ -3,7 +3,7 @@
 abstract class Stream
 {
     /**
-     * Underlying socket resource
+     * Underlying stream resource
      *
      * @var resource
      */
