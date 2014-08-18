@@ -31,9 +31,10 @@ class StreamServerSocket extends StreamSocket
             );
         }
 
+        $flags = STREAM_SERVER_BIND | STREAM_SERVER_LISTEN;
         $ctx = stream_context_create($options);
 
-        $this->socket = stream_socket_server($uri, $errNo, $errStr, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN, $ctx);
+        $this->socket = stream_socket_server($uri, $errNo, $errStr, $flags, $ctx);
         if (!$this->socket) {
             throw new \RuntimeException('Failed to create stream server on ' . $uri . ': ' . $errNo . ': ' . $errStr);
         }
