@@ -1,36 +1,21 @@
 <?php
 
-class StreamServerSocket implements GenericStream
+class StreamServerSocket extends StreamSocket
 {
-    const OPTION_CLIENT_CLASS = 1;
-
-    /**
-     * Defined option values
-     *
-     * @var array
-     */
-    private $options = [
-        self::OPTION_CLIENT_CLASS => 'StreamPeerSocket',
-    ];
-
-    /**
-     * @var resource
-     */
-    private $stream;
-
     /**
      * Constructor creates and binds the socket
      *
      * @param string $uri
      * @param array $options
+     * @throws \LogicException
      * @throws \RuntimeException
      */
     public function __construct($uri, array $options = [])
     {
         $ctx = stream_context_create($options);
 
-        $this->stream = stream_socket_server($uri, $errNo, $errStr, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN, $ctx);
-        if (!$this->stream) {
+        $this->socket = stream_socket_server($uri, $errNo, $errStr, STREAM_SERVER_BIND | STREAM_SERVER_LISTEN, $ctx);
+        if (!$this->socket) {
             throw new \RuntimeException('Failed to create stream server on ' . $uri . ': ' . $errNo . ': ' . $errStr);
         }
     }
@@ -43,8 +28,8 @@ class StreamServerSocket implements GenericStream
      */
     public function accept($timeout = null)
     {
-        if ($client = stream_socket_accept($this->stream, $timeout)) {
-            $className = $this->options[self::OPTION_CLIENT_CLASS];
+        if ($client = stream_socket_accept($this->socket, $timeout)) {
+            $className = $this->getOption('socket', 'client_class');
             return new $className($client);
         }
 
@@ -61,37 +46,14 @@ class StreamServerSocket implements GenericStream
      */
     public function setOption($family, $option, $value)
     {
-        switch ($option) {
-            case self::OPTION_CLIENT_CLASS:
-                $value = (string)$value;
-                if (!is_subclass_of($value, 'StreamPeerSocket')) {
-                    throw new \LogicException('Client class must extend StreamPeerSocket');
-                }
-                break;
+        if ($family === 'socket' && $option === 'client_class') {
+            $value = (string)$value;
 
-            default:
-                throw new \LogicException('Unknown option: ' . $option);
+            if (!is_subclass_of($value, 'StreamPeerSocket')) {
+                throw new \LogicException('Client class must extend StreamPeerSocket');
+            }
         }
 
-        $this->options[$option] = $value;
-    }
-
-    /**
-     * Get the value of an option
-     *
-     * @param string $family
-     * @param int $option
-     * @throws LogicException
-     * @return mixed
-     */
-    public function getOption($family, $option)
-    {
-        switch ($option) {
-            case self::OPTION_CLIENT_CLASS:
-                return isset($this->options[$option]) ? $this->options[$option] : null;
-
-            default:
-                throw new \LogicException('Unknown option: ' . $option);
-        }
+        parent::setOption($family, $option, $value);
     }
 }

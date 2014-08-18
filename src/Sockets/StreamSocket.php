@@ -1,7 +1,12 @@
 <?php
 
-abstract class StreamSocket implements GenericStream
+abstract class StreamSocket extends Stream
 {
+    /**
+     * Class constants for shutdown type
+     *
+     * @todo probably no point in these
+     */
     const SHUT_RD   = STREAM_SHUT_RD;
     const SHUT_WR   = STREAM_SHUT_WR;
     const SHUT_RDWR = STREAM_SHUT_RDWR;
@@ -14,18 +19,29 @@ abstract class StreamSocket implements GenericStream
     protected $socket;
 
     /**
-     * Options that have been set on the stream
-     *
-     * @var array
-     */
-    private $options = [];
-
-    /**
      * Get a list of the URI schemes that this type of stream can handle
      *
      * @return array
      */
-    abstract protected function getSupportedSchemes();
+    protected function getSupportedSchemes()
+    {
+        static $schemes = null;
+
+        if ($schemes === null) {
+            $schemes = [];
+
+            $supportableSchemes = ['tcp', 'unix', 'ssl', 'sslv2', 'sslv3', 'tls', 'tlsv1.0', 'tlsv1.1', 'tlsv1.2'];
+            $availableSchemes = array_flip(stream_get_transports());
+
+            foreach ($supportableSchemes as $scheme) {
+                if (isset($availableSchemes[$scheme])) {
+                    $schemes[] = $scheme;
+                }
+            }
+        }
+
+        return $schemes;
+    }
 
     /**
      * Helper method to parse the URI supplied for the remote socket
@@ -82,9 +98,9 @@ abstract class StreamSocket implements GenericStream
     }
 
     /**
-     * Close the socket
+     * Close the stream
      *
-     * @throws \LogicException when the underlying socket has already been closed
+     * @throws \LogicException when the underlying stream has already been closed
      * @throws \RuntimeException when the close operation fails
      */
     public function close()
@@ -96,29 +112,5 @@ abstract class StreamSocket implements GenericStream
         }
 
         $this->socket = null;
-    }
-
-    /**
-     * Set the value of an option on a stream
-     *
-     * @param string $family
-     * @param string $option
-     * @param mixed $value
-     */
-    public function setOption($family, $option, $value)
-    {
-        $this->options[$family][$option] = $value;
-    }
-
-    /**
-     * Get the value of an option on a stream
-     *
-     * @param string $family
-     * @param string $option
-     * @return mixed
-     */
-    public function getOption($family, $option)
-    {
-        return isset($this->options[$family][$option]) ? $this->options[$family][$option] : null;
     }
 }

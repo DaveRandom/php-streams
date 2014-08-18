@@ -1,8 +1,7 @@
 <?php
 
-class StreamPeerSocket implements ReadableStream, WriteableStream, EncryptableStream
+class StreamPeerSocket extends StreamSocket implements ReadableStream, WriteableStream, EncryptableStream
 {
-
     /**
      * Constructor
      *

@@ -10,6 +10,26 @@ abstract class DatagramSocket extends StreamSocket
     protected $defaultRemoteAddress = null;
 
     /**
+     * Get a list of the URI schemes that this type of stream can handle
+     *
+     * @return array
+     */
+    protected function getSupportedSchemes()
+    {
+        static $schemes = null;
+
+        if ($schemes === null) {
+            $schemes = ['udp'];
+
+            if (in_array('udg', stream_get_transports())) {
+                $schemes[] = 'udg';
+            }
+        }
+
+        return $schemes;
+    }
+
+    /**
      * Userland implementation detail
      *
      * @param string|Datagram $data

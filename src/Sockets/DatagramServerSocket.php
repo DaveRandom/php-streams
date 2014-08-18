@@ -7,7 +7,7 @@ class DatagramServerSocket extends DatagramSocket implements ReadableStream
      *
      * Create and bind the local socket
      *
-     * @param $uri
+     * @param string $uri
      * @param array $options
      */
     public function __construct($uri, array $options = [])
