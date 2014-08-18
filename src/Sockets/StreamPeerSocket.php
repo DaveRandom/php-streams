@@ -13,7 +13,7 @@ class StreamPeerSocket extends StreamSocket implements ReadableStream, Writeable
     public function __construct($uri, array $options = [])
     {
         if (is_resource($uri)) {
-            $this->socket = $uri;
+            $this->stream = $uri;
             return;
         }
 
@@ -39,8 +39,8 @@ class StreamPeerSocket extends StreamSocket implements ReadableStream, Writeable
         }
         $ctx = stream_context_create($options);
 
-        $this->socket = stream_socket_client($uri, $errNo, $errStr, (float)$timeout, $flags, $ctx);
-        if (!$this->socket) {
+        $this->stream = stream_socket_client($uri, $errNo, $errStr, (float)$timeout, $flags, $ctx);
+        if (!$this->stream) {
             throw new \RuntimeException('Failed to create stream client on ' . $uri . ': ' . $errNo . ': ' . $errStr);
         }
     }
@@ -65,7 +65,7 @@ class StreamPeerSocket extends StreamSocket implements ReadableStream, Writeable
                 ->getValue();
         }
 
-        return stream_socket_enable_crypto($this->socket, true, $type, $sessionSteam);
+        return stream_socket_enable_crypto($this->stream, true, $type, $sessionSteam);
     }
 
     /**
@@ -75,7 +75,7 @@ class StreamPeerSocket extends StreamSocket implements ReadableStream, Writeable
      */
     public function disableEncryption()
     {
-        return stream_socket_enable_crypto($this->socket, false);
+        return stream_socket_enable_crypto($this->stream, false);
     }
 
     /**

@@ -64,7 +64,7 @@ abstract class DatagramSocket extends StreamSocket
     public function send($data, $flags = null, $address = null)
     {
         list($data, $address) = $this->normalizeDataAndAddress($data, $address);
-        return stream_socket_sendto($this->socket, $data, $flags, $address);
+        return stream_socket_sendto($this->stream, $data, $flags, $address);
     }
 
     /**
@@ -76,7 +76,7 @@ abstract class DatagramSocket extends StreamSocket
      */
     public function recv($length = null, $flags = 0)
     {
-        $data = stream_socket_recvfrom($this->socket, $length !== null ? (int)$length : 1024, $flags, $address);
+        $data = stream_socket_recvfrom($this->stream, $length !== null ? (int)$length : 1024, $flags, $address);
         return $data ? new Datagram($data, $address) : null;
     }
 }

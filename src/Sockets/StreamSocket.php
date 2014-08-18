@@ -12,13 +12,6 @@ abstract class StreamSocket extends Stream
     const SHUT_RDWR = STREAM_SHUT_RDWR;
 
     /**
-     * Underlying socket resource
-     *
-     * @var resource
-     */
-    protected $socket;
-
-    /**
      * Get a list of the URI schemes that this type of stream can handle
      *
      * @return array
@@ -72,9 +65,9 @@ abstract class StreamSocket extends Stream
      */
     public function shutdown($how = self::SHUT_RDWR)
     {
-        if ($this->socket === null) {
+        if ($this->stream === null) {
             throw new \LogicException('Failed to shut down socket: already closed');
-        } else if (!stream_socket_shutdown($this->socket, $how)) {
+        } else if (!stream_socket_shutdown($this->stream, $how)) {
             throw new \RuntimeException('Failed to shut down socket: operation failed');
         }
     }
@@ -88,29 +81,12 @@ abstract class StreamSocket extends Stream
      */
     public function getLocalName()
     {
-        if ($this->socket === null) {
+        if ($this->stream === null) {
             throw new \LogicException('Cannot retrieve socket name: socket has been closed');
-        } else if (false === $name = stream_socket_get_name($this->socket, false)) {
+        } else if (false === $name = stream_socket_get_name($this->stream, false)) {
             throw new \RuntimeException('Cannot retrieve socket name: operation failed');
         }
 
         return $name;
-    }
-
-    /**
-     * Close the stream
-     *
-     * @throws \LogicException when the underlying stream has already been closed
-     * @throws \RuntimeException when the close operation fails
-     */
-    public function close()
-    {
-        if ($this->socket === null) {
-            throw new \LogicException('Failed to shut down socket: already closed');
-        } else if (!fclose($this->socket)) {
-            throw new \RuntimeException('Failed to shut down socket: operation failed');
-        }
-
-        $this->socket = null;
     }
 }

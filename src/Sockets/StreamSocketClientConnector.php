@@ -10,7 +10,7 @@ class StreamSocketClientConnector
      *
      * @param string $url
      * @param array $options
-     * @return PeerSocket
+     * @return StreamPeerSocket
      */
     public function open($url, array $options = [])
     {

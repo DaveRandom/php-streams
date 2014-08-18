@@ -23,8 +23,8 @@ class DatagramClientSocket extends DatagramSocket implements ReadableStream, Wri
             throw new \LogicException('udg:// URIs require a path component');
         }
 
-        $this->socket = stream_socket_client($uri, $errNo, $errStr);
-        if (!$this->socket) {
+        $this->stream = stream_socket_client($uri, $errNo, $errStr);
+        if (!$this->stream) {
             throw new \RuntimeException('Creating socket failed: ' . $errNo . ': ' . $errStr);
         }
     }
