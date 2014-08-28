@@ -2,6 +2,9 @@
 
 abstract class Stream
 {
+    const FILTER_WRITE = STREAM_FILTER_WRITE;
+    const FILTER_READ = STREAM_FILTER_READ;
+
     /**
      * Underlying stream resource
      *
@@ -15,6 +18,8 @@ abstract class Stream
      * @var array
      */
     private $options = [];
+
+    private $filters = [];
 
     /**
      * Close the stream
@@ -82,5 +87,22 @@ abstract class Stream
         $result->wrapperType = $data['wrapper_type'];
 
         return $result;
+    }
+
+    public function prependFilter($filtername, $read_write = null, array $params = []) {
+        $resource = stream_filter_append($this->stream, $filtername, $read_write, $params);
+
+        $this->filters[$filtername] = $resource;
+    }
+
+    public function appendFilter($filtername, $read_write = null, array $params = []) {
+        $resource = stream_filter_append($this->stream, $filtername, $read_write, $params);
+
+        $this->filters[$filtername] = $resource;
+    }
+
+    public function removeFilter($filtername) {
+        stream_filter_remove($this->filters[$filetername]);
+        unset($this->filters[$filtername]);
     }
 }
